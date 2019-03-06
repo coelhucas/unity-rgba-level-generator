@@ -1,7 +1,7 @@
 # Unity Room Creator
 ![](https://i.imgur.com/iUR6DSI.png)
 ## Overview
-During my spare time playing with a Dungeon Crawler prototype, I decided to make this simple algorithm (the main script has only 54 lines and you can get it ![here](https://github.com/lcrabbit/unity-room-creator/blob/master/Assets/Scripts/RoomGenerator.cs)).
+During my spare time playing with a Dungeon Crawler prototype, I decided to make this simple algorithm (the main script has only 54 lines and you can get it ![here](https://github.com/lcrabbit/unity-room-creator/blob/master/Assets/Scripts/RoomGenerator.cs)) to level design prototyping.
 
 Basically, it turns a `Texture2D` into our map (or whatever you'd like to generate based in colors).
 This base uses only the magenta (`Color(1, 0, 1, 1)`) to handle Walls, but the script is easily expansible to map enemies, chests, ground and everything else.
