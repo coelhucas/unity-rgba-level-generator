@@ -1,14 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class RoomGenerator : MonoBehaviour
 {
 
     public Texture2D sourceSprite;
-
-
-    Color wallColor = new Color(1, 0, 1, 1);
+    public Color wallColor = new Color(1, 0, 1, 1);
 
     int verticalPlacement = 0;
     int horizontalPlacement = 0;
@@ -17,6 +16,8 @@ public class RoomGenerator : MonoBehaviour
 
     Mesh wallMesh;
     Bounds wallBounds;
+
+    string outputPath = "Assets/Resources/Prefabs/GeneratedOutput";
 
     private void Awake()
     {
@@ -28,13 +29,18 @@ public class RoomGenerator : MonoBehaviour
 
     void Start()
     {
-        Color[] pixels = sourceSprite.GetPixels();
-        for (int i = 0; i < pixels.Length; i++)
+        GenerateRoom(); 
+    }
+
+    void GenerateRoom()
+    {
+        Color[] spriteColors = sourceSprite.GetPixels();
+        for (int i = 0; i < spriteColors.Length; i++)
         {
             horizontalPlacement++;
 
-            if (pixels[i] == wallColor)
-            {   
+            if (spriteColors[i] == wallColor)
+            {
                 CreateNewWall(horizontalPlacement, verticalPlacement);
             }
 
@@ -44,11 +50,19 @@ public class RoomGenerator : MonoBehaviour
                 horizontalPlacement = 0;
             }
         }
+        SaveAsPrefab();
     }
 
     void CreateNewWall(int horizontalPlacement, int verticalPlacement)
     {
         var newWall = Instantiate(wallPrefab, transform);
         newWall.transform.position = new Vector3(horizontalPlacement * wallBounds.size.x, 0, verticalPlacement * wallBounds.size.z);
+    }
+
+    void SaveAsPrefab()
+    {
+        var uniqueInstanceName = string.Format(@"room-{0}.prefab", GUID.Generate());
+        Destroy(this);
+        PrefabUtility.SaveAsPrefabAsset(gameObject, outputPath + uniqueInstanceName);        
     }
 }
