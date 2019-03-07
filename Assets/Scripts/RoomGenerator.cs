@@ -17,7 +17,7 @@ public class RoomGenerator : MonoBehaviour
     Mesh wallMesh;
     Bounds wallBounds;
 
-    string outputPath = "Assets/Resources/Prefabs/GeneratedOutput";
+    string outputPath = "Assets/Resources/Prefabs/GeneratedOutput/";
 
     private void Awake()
     {
