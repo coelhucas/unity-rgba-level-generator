@@ -7,25 +7,15 @@ public class RoomGenerator : MonoBehaviour
 {
 
     public Texture2D sourceSprite;
-    public Color wallColor = new Color(1, 0, 1, 1);
+    public InstanceEntry[] instancesToGenerate;
 
     int verticalPlacement = 0;
     int horizontalPlacement = 0;
 
-    GameObject wallPrefab;
-
-    Mesh wallMesh;
-    Bounds wallBounds;
+    Mesh instanceMesh;
+    Bounds instanceBounds;
 
     string outputPath = "Assets/Resources/Prefabs/GeneratedOutput/";
-
-    private void Awake()
-    {
-        wallPrefab = Resources.Load("Prefabs/Wall") as GameObject;
-        wallMesh = wallPrefab.GetComponent<MeshFilter>().sharedMesh;
-        wallBounds = wallMesh.bounds;
-    }
-
 
     void Start()
     {
@@ -38,10 +28,12 @@ public class RoomGenerator : MonoBehaviour
         for (int i = 0; i < spriteColors.Length; i++)
         {
             horizontalPlacement++;
-
-            if (spriteColors[i] == wallColor)
+            foreach (InstanceEntry instanceEntry in instancesToGenerate)
             {
-                CreateNewWall(horizontalPlacement, verticalPlacement);
+                if (spriteColors[i] == instanceEntry.sourceColor)
+                {
+                    GenerateNewInstance(instanceEntry.instancePrefab, horizontalPlacement, verticalPlacement);
+                }
             }
 
             if (horizontalPlacement == sourceSprite.width)
@@ -53,10 +45,16 @@ public class RoomGenerator : MonoBehaviour
         SaveAsPrefab();
     }
 
-    void CreateNewWall(int horizontalPlacement, int verticalPlacement)
+    void GenerateNewInstance(GameObject instanceToGenerate, int horizontalPlacement, int verticalPlacement)
     {
-        var newWall = Instantiate(wallPrefab, transform);
-        newWall.transform.position = new Vector3(horizontalPlacement * wallBounds.size.x, 0, verticalPlacement * wallBounds.size.z);
+        var newInstance = Instantiate(instanceToGenerate, transform);
+        instanceMesh = newInstance.GetComponent<MeshFilter>().sharedMesh;
+        instanceBounds = instanceMesh.bounds;
+
+        newInstance.transform.position = new Vector3(
+                                        horizontalPlacement * instanceBounds.size.x, 
+                                        0, 
+                                        verticalPlacement * instanceBounds.size.z);
     }
 
     void SaveAsPrefab()
@@ -65,4 +63,11 @@ public class RoomGenerator : MonoBehaviour
         Destroy(this);
         PrefabUtility.SaveAsPrefabAsset(gameObject, outputPath + uniqueInstanceName);        
     }
+}
+
+[System.Serializable]
+public class InstanceEntry
+{
+    public GameObject instancePrefab;
+    public Color sourceColor;
 }
