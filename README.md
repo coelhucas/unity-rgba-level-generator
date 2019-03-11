@@ -1,4 +1,4 @@
-# Unity Room Creator
+# Unity RGB Based Level Generator
 ![](https://i.imgur.com/iUR6DSI.png)
 ## Overview
 During my spare time playing with a Dungeon Crawler prototype, I decided to make this simple algorithm (the main script has only 54 lines and you can get it ![here](https://github.com/lcrabbit/unity-room-creator/blob/master/Assets/Scripts/RoomGenerator.cs)) to level design prototyping.
